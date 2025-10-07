@@ -26,17 +26,19 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "phone", unique = true, nullable = false)
     private String phone;
 
+    @Column(name="date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
@@ -44,6 +46,14 @@ public class Patient {
 
     @Column(length = 500)
     private String address;
+
+    private String city;
+
+    private String state;
+
+    private String country;
+
+    private String pinCode;
 
     @Column(length = 1000)
     private String medicalHistory;
