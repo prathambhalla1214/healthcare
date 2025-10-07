@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Management System</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <i class="fas fa-heartbeat"></i>
+      <span>HealthCare+</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="patients.html"><i class="fas fa-user-injured"></i> Patients</a></li>
+      <li><a href="doctors.html"><i class="fas fa-user-md"></i> Doctors</a></li>
+      <li><a href="appointments.html"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+      <li><a href="reviews.html"><i class="fas fa-star"></i> Reviews</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+  <header class="page-header">
+    <h1><i class="fas fa-chart-line"></i> Dashboard Overview</h1>
+    <p>Welcome to the Healthcare Management System</p>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-doctors">
+      <div class="stat-icon">
+        <i class="fas fa-user-md"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="totalDoctors">-</h3>
+        <p>Total Doctors</p>
+        <span class="stat-badge" id="availableDoctors">- Available</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-patients">
+      <div class="stat-icon">
+        <i class="fas fa-user-injured"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="totalPatients">-</h3>
+        <p>Total Patients</p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-appointments">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="totalAppointments">-</h3>
+        <p>Total Appointments</p>
+        <span class="stat-badge" id="scheduledAppointments">- Scheduled</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-reviews">
+      <div class="stat-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="totalReviews">-</h3>
+        <p>Total Reviews</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-pie"></i> Appointment Statistics</h2>
+      </div>
+      <div class="card-body">
+        <div class="appointment-stats">
+          <div class="stat-item">
+            <span class="stat-label">Scheduled</span>
+            <span class="stat-value scheduled" id="scheduledCount">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Completed</span>
+            <span class="stat-value completed" id="completedCount">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Cancelled</span>
+            <span class="stat-value cancelled" id="cancelledCount">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-tasks"></i> Quick Actions</h2>
+      </div>
+      <div class="card-body">
+        <div class="quick-actions">
+          <a href="patients.html" class="action-btn">
+            <i class="fas fa-user-plus"></i>
+            <span>Register Patient</span>
+          </a>
+          <a href="doctors.html" class="action-btn">
+            <i class="fas fa-user-md"></i>
+            <span>Add Doctor</span>
+          </a>
+          <a href="appointments.html" class="action-btn">
+            <i class="fas fa-calendar-plus"></i>
+            <span>Book Appointment</span>
+          </a>
+          <a href="reviews.html" class="action-btn">
+            <i class="fas fa-comment-medical"></i>
+            <span>View Reviews</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2024 HealthCare+ Management System. All rights reserved.</p>
+</footer>
+
+<script src="scripts/config.js"></script>
+<script src="scripts/dashboard.js"></script>
+</body>
+</html>

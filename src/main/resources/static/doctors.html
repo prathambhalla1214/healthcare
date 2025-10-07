@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Management - HealthCare+</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <i class="fas fa-heartbeat"></i>
+            <span>HealthCare+</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="patients.html"><i class="fas fa-user-injured"></i> Patients</a></li>
+            <li><a href="doctors.html" class="active"><i class="fas fa-user-md"></i> Doctors</a></li>
+            <li><a href="appointments.html"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="reviews.html"><i class="fas fa-star"></i> Reviews</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container">
+    <header class="page-header">
+        <h1><i class="fas fa-user-md"></i> Doctor Management</h1>
+        <button class="btn btn-primary" onclick="openModal('doctorModal')">
+            <i class="fas fa-plus"></i> Add New Doctor
+        </button>
+    </header>
+
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="specializationFilter">Filter by Specialization:</label>
+            <select id="specializationFilter" onchange="filterDoctors()">
+                <option value="">All Specializations</option>
+                <option value="Cardiologist">Cardiologist</option>
+                <option value="Neurologist">Neurologist</option>
+                <option value="Pediatrician">Pediatrician</option>
+                <option value="Orthopedic">Orthopedic</option>
+                <option value="Dermatologist">Dermatologist</option>
+                <option value="General Physician">General Physician</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>
+                <input type="checkbox" id="availableFilter" onchange="filterDoctors()">
+                Show Available Only
+            </label>
+        </div>
+    </div>
+
+    <div class="doctors-grid" id="doctorsGrid">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i> Loading doctors...
+        </div>
+    </div>
+</main>
+
+<div id="doctorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-user-md"></i> <span id="modalTitle">Add New Doctor</span></h2>
+            <button class="close-btn" onclick="closeModal('doctorModal')">&times;</button>
+        </div>
+        <form id="doctorForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="specialization">Specialization <span class="required">*</span></label>
+                    <input type="text" id="specialization" list="specializationList" required>
+                    <datalist id="specializationList">
+                        <option value="Cardiologist">
+                        <option value="Neurologist">
+                        <option value="Pediatrician">
+                        <option value="Orthopedic">
+                        <option value="Dermatologist">
+                        <option value="General Physician">
+                    </datalist>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="qualification">Qualification</label>
+                    <input type="text" id="qualification" placeholder="e.g., MBBS, MD">
+                </div>
+                <div class="form-group">
+                    <label for="experienceYears">Experience (Years)</label>
+                    <input type="number" id="experienceYears" min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="consultationFee">Consultation Fee ($)</label>
+                    <input type="number" id="consultationFee" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="available">Availability</label>
+                    <select id="available">
+                        <option value="true">Available</option>
+                        <option value="false">Not Available</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Clinic Address</label>
+                <textarea id="address" rows="2"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('doctorModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="fas fa-save"></i> Save Doctor
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="scripts/config.js"></script>
+<script src="scripts/utils.js"></script>
+<script src="scripts/doctors.js"></script>
+</body>
+</html>

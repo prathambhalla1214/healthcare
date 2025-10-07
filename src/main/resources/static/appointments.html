@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Management - HealthCare+</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <i class="fas fa-heartbeat"></i>
+      <span>HealthCare+</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="patients.html"><i class="fas fa-user-injured"></i> Patients</a></li>
+      <li><a href="doctors.html"><i class="fas fa-user-md"></i> Doctors</a></li>
+      <li><a href="appointments.html" class="active"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+      <li><a href="reviews.html"><i class="fas fa-star"></i> Reviews</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+  <header class="page-header">
+    <h1><i class="fas fa-calendar-check"></i> Appointment Management</h1>
+    <button class="btn btn-primary" onclick="openModal('appointmentModal')">
+      <i class="fas fa-calendar-plus"></i> Book Appointment
+    </button>
+  </header>
+
+  <div class="filter-section">
+    <div class="filter-group">
+      <label for="statusFilter">Filter by Status:</label>
+      <select id="statusFilter" onchange="filterAppointments()">
+        <option value="">All Statuses</option>
+        <option value="SCHEDULED">Scheduled</option>
+        <option value="CONFIRMED">Confirmed</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+        <option value="NO_SHOW">No Show</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Appointments</h2>
+    </div>
+    <div class="card-body">
+      <div class="appointments-list" id="appointmentsList">
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i> Loading appointments...
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="appointmentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-calendar-plus"></i> Book New Appointment</h2>
+      <button class="close-btn" onclick="closeModal('appointmentModal')">&times;</button>
+    </div>
+    <form id="appointmentForm">
+      <div class="form-group">
+        <label for="patientId">Select Patient <span class="required">*</span></label>
+        <select id="patientId" required>
+          <option value="">Loading patients...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="doctorId">Select Doctor <span class="required">*</span></label>
+        <select id="doctorId" required>
+          <option value="">Loading doctors...</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="appointmentDate">Appointment Date <span class="required">*</span></label>
+          <input type="date" id="appointmentDate" required>
+        </div>
+        <div class="form-group">
+          <label for="appointmentTime">Appointment Time <span class="required">*</span></label>
+          <input type="time" id="appointmentTime" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="symptoms">Symptoms / Reason for Visit</label>
+        <textarea id="symptoms" rows="3" placeholder="Describe the symptoms or reason for visit"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('appointmentModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <i class="fas fa-calendar-check"></i> Book Appointment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="detailsModal" class="modal">
+  <div class="modal-content modal-large">
+    <div class="modal-header">
+      <h2><i class="fas fa-info-circle"></i> Appointment Details</h2>
+      <button class="close-btn" onclick="closeModal('detailsModal')">&times;</button>
+    </div>
+    <div id="appointmentDetails" class="appointment-details-content"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="scripts/config.js"></script>
+<script src="scripts/utils.js"></script>
+<script src="scripts/appointments.js"></script>
+</body>
+</html>
