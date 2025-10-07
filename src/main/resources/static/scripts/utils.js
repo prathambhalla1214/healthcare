@@ -1,3 +1,5 @@
+// utils.js (IMPROVED)
+
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -14,6 +16,7 @@ function closeModal(modalId) {
 
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
+    if (!toast) return;
     toast.textContent = message;
     toast.className = `toast show ${type}`;
 
@@ -66,30 +69,50 @@ function validateEmail(email) {
     return emailRegex.test(email);
 }
 
+/**
+ * IMPROVED: fetchAPI conditionally sets 'Content-Type: application/json'.
+ * This fixes issues with Spring endpoints using @RequestParam (query params)
+ * which do not expect a JSON body and fail if the content-type header is present.
+ */
 async function fetchAPI(url, options = {}) {
+    const requestOptions = {
+        ...options,
+        headers: {
+            ...options.headers
+        }
+    };
+
+    // Only set 'Content-Type: application/json' if a body is present 
+    if (requestOptions.body && !requestOptions.headers['Content-Type'] && !requestOptions.headers['content-type']) {
+        requestOptions.headers['Content-Type'] = 'application/json';
+    } else if (!requestOptions.body) {
+        // Explicitly remove content-type for methods like GET/DELETE/PUT with query params
+        delete requestOptions.headers['Content-Type'];
+        delete requestOptions.headers['content-type'];
+    }
+
     try {
-        const response = await fetch(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            },
-            ...options
-        });
+        const response = await fetch(url, requestOptions);
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
+            const contentType = response.headers.get('Content-Type');
+            let errorData = {};
+            if (contentType && contentType.includes('application/json')) {
+                errorData = await response.json().catch(() => ({}));
+            } else {
+                errorData.message = await response.text().catch(() => `HTTP error! status: ${response.status}`);
+            }
+
             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        // Handle 204 No Content (like for DELETE or some PUTs)
+        if (response.status === 204 || response.headers.get('content-length') === '0') {
+            return null;
+        }
+
+        return response.json();
     } catch (error) {
-        console.error('API Error:', error);
         throw error;
     }
 }
-
-window.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) {
-        e.target.classList.remove('active');
-    }
-});
