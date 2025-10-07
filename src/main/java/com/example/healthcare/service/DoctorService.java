@@ -34,13 +34,19 @@ public class DoctorService {
     }
 
     @Transactional(readOnly = true)
+    public Doctor getDoctorByEmail(String email) {
+        return doctorRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Doctor not found with email: " + email));
+    }
+
+    @Transactional(readOnly = true)
     public List<Doctor> getDoctorsBySpecialization(String specialization) {
         return doctorRepository.findBySpecialization(specialization);
     }
 
     @Transactional(readOnly = true)
     public List<Doctor> getAvailableDoctors() {
-        return doctorRepository.findByAvailable(true);
+        return doctorRepository.findByAvailableTrue();
     }
 
     @Transactional(readOnly = true)
@@ -54,6 +60,7 @@ public class DoctorService {
 
         doctor.setName(doctorDetails.getName());
         doctor.setSpecialization(doctorDetails.getSpecialization());
+        doctor.setEmail(doctorDetails.getEmail());
         doctor.setPhone(doctorDetails.getPhone());
         doctor.setQualification(doctorDetails.getQualification());
         doctor.setExperienceYears(doctorDetails.getExperienceYears());

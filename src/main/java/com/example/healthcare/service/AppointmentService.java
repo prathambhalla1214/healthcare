@@ -25,24 +25,7 @@ public class AppointmentService {
         Patient patient = patientService.getPatientById(patientId);
         Doctor doctor = doctorService.getDoctorById(doctorId);
 
-        if (!doctor.getAvailable()) {
-            throw new RuntimeException("Doctor is not available");
-        }
-
-        if (appointmentDateTime.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Appointment date cannot be in the past");
-        }
-
-        // Check for conflicting appointments
-        List<Appointment> conflictingAppointments = appointmentRepository.findByDoctorAndDateRange(
-                doctorId,
-                appointmentDateTime.minusMinutes(30),
-                appointmentDateTime.plusMinutes(30)
-        );
-
-        if (!conflictingAppointments.isEmpty()) {
-            throw new RuntimeException("Doctor already has an appointment at this time");
-        }
+        validateDoctorAvailability(doctor, appointmentDateTime);
 
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
@@ -52,6 +35,26 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.SCHEDULED);
 
         return appointmentRepository.save(appointment);
+    }
+
+    private void validateDoctorAvailability(Doctor doctor, LocalDateTime appointmentDateTime) {
+        if (!doctor.getAvailable()) {
+            throw new RuntimeException("Doctor is not available");
+        }
+
+        if (appointmentDateTime.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Appointment date cannot be in the past");
+        }
+
+        List<Appointment> conflictingAppointments = appointmentRepository.findByDoctorAndDateRange(
+                doctor.getId(),
+                appointmentDateTime.minusMinutes(30),
+                appointmentDateTime.plusMinutes(30)
+        );
+
+        if (!conflictingAppointments.isEmpty()) {
+            throw new RuntimeException("Doctor already has an appointment at this time");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -109,14 +112,12 @@ public class AppointmentService {
             throw new RuntimeException("Appointment date cannot be in the past");
         }
 
-        // Check for conflicts with new time
         List<Appointment> conflictingAppointments = appointmentRepository.findByDoctorAndDateRange(
                 appointment.getDoctor().getId(),
                 newDateTime.minusMinutes(30),
                 newDateTime.plusMinutes(30)
         );
 
-        // Remove current appointment from conflicts
         conflictingAppointments.removeIf(a -> a.getId().equals(id));
 
         if (!conflictingAppointments.isEmpty()) {

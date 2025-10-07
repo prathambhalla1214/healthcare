@@ -19,6 +19,9 @@ public class PatientService {
         if (patientRepository.existsByEmail(patient.getEmail())) {
             throw new RuntimeException("Patient with email " + patient.getEmail() + " already exists");
         }
+        if (patientRepository.existsByPhoneNumber(patient.getPhoneNumber())) {
+            throw new RuntimeException("Patient with phone " + patient.getPhoneNumber() + " already exists");
+        }
         return patientRepository.save(patient);
     }
 
@@ -39,15 +42,25 @@ public class PatientService {
                 .orElseThrow(() -> new RuntimeException("Patient not found with email: " + email));
     }
 
+    @Transactional(readOnly = true)
+    public Patient getPatientByPhoneNumber(String phoneNumber) {
+        return patientRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new RuntimeException("Patient not found with phone: " + phoneNumber));
+    }
+
     @Transactional
     public Patient updatePatient(Long id, Patient patientDetails) {
         Patient patient = getPatientById(id);
 
         patient.setName(patientDetails.getName());
-        patient.setPhone(patientDetails.getPhone());
+        patient.setPhoneNumber(patientDetails.getPhoneNumber());
         patient.setDateOfBirth(patientDetails.getDateOfBirth());
         patient.setGender(patientDetails.getGender());
         patient.setAddress(patientDetails.getAddress());
+        patient.setCity(patientDetails.getCity());
+        patient.setState(patientDetails.getState());
+        patient.setCountry(patientDetails.getCountry());
+        patient.setPinCode(patientDetails.getPinCode());
         patient.setMedicalHistory(patientDetails.getMedicalHistory());
 
         return patientRepository.save(patient);
